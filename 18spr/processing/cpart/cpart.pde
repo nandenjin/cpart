@@ -33,7 +33,7 @@ void setup(){
   size(400,400);
   
   // 接続先を指定
-  wsc= new WebsocketClient(this, "ws://localhost:3030");
+  wsc= new WebsocketClient(this, "ws://ca.nandenjin.com");
   
 }
 
