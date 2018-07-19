@@ -38,7 +38,7 @@ wss.on( 'connection', socket => {
 
 } );
 
-server.listen( 3000 );
+server.listen( 3030 );
 
 
 function broadcast( msg ) {
