@@ -8,16 +8,71 @@
 
   <title>Rhythm! - Computer Art 2018</title>
 
+  <style>
+    
+    html, body {
+
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      color: #fff;
+      background-color: #000;
+      font: normal 14px sans-serif;
+
+    }
+
+    .name {
+
+      outline: 0;
+      border: none;
+      background-color: #222;
+      color: #fff;
+      padding: 10px;
+      font-size: 15px;
+
+    }
+
+    .button-container.inactive{
+
+      opacity: 0.5;
+      pointer-events: none;
+
+    }
+
+    .button{
+
+      width: 30vw;
+      height: 30vw;
+      margin: 1vw;
+
+    }
+
+    .button:active{
+
+      animation: press 0.5s ease 0s alternate;
+
+    }
+
+    @keyframes press{
+
+      0%{ transform: scale3d(1,1,1); }
+      50%{ transform: scale3d(1.2,1.2,1); }
+      100%{ transform: scale3d(1,1,1); }
+
+    }
+
+  </style>
+
 </head>
 <body>
 
   <div id="app" style="display: none;">
 
-    <input type="text" v-model="name" placeholder="名前を入れてください">
+    <input type="text" v-model="name" placeholder="名前を入れてください" class="name">
     
-    <div v-if="sw">
+    <div v-if="sw" class="button-container" :class="{ inactive: name == '' }">
       
-      <button @click="send">{{ cnt }}</button>
+      <img v-for="i in itemN" @click="send(i-1)" :key="i" :src="'/items/' + (i-1) + '.png'" class="button">
 
     </div>
 
@@ -42,7 +97,8 @@
 
         sw: false,
         cnt: 0,
-        name: ''
+        name: '',
+        itemN: 12,
 
       },
 
@@ -66,9 +122,9 @@
 
       methods: {
 
-        send() {
+        send( n ) {
 
-          ws.send( JSON.stringify( { kind: this.cnt++, name: this.name } ) );
+          ws.send( JSON.stringify( { kind: n, name: this.name } ) );
 
         }
 
