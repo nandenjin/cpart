@@ -119,6 +119,15 @@
   
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script>
+
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
+    const context = new AudioContext();
+    let soundBuffer;
+
+    fetch( 'beep.mp3' )
+      .then( res => res.arrayBuffer() )
+      .then( buffer => context.decodeAudioData( buffer, b => soundBuffer = b ) );
     
     let ws;
 
@@ -160,6 +169,11 @@
       methods: {
 
         send( n ) {
+
+          const node = context.createBufferSource();
+          node.buffer = soundBuffer;
+          node.connect( context.destination );
+          node.start( 0 );
 
           this.anim = false;
           this.refreshDisp();
