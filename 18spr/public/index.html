@@ -41,17 +41,32 @@
 
     .button{
 
-      width: 30vw;
-      height: 30vw;
-      margin: 1vw;
+      width: 40vw;
+      height: 40vw;
+      margin: 5vw 30vw;
+      transform: scale3d( 1, 1, 1 );
 
     }
 
     .button:active{
 
-      animation: press 0.5s ease 0s alternate;
+      /*animation: press 0.5s ease 0s alternate;*/
 
     }
+
+    .anim-enter, .anim-leave-to{
+
+      transform: scale3d( 0.1, 0.1, 1 );
+
+    }
+
+    .anim-enter-active, .anim-leave-active{
+
+      transition: transform 0.3s ease-out;
+
+    }
+
+
 
     @keyframes press{
 
@@ -71,9 +86,10 @@
     <input type="text" v-model="name" placeholder="名前を入れてください" class="name">
     
     <div v-if="sw" class="button-container" :class="{ inactive: name == '' }">
+      <transition name="anim" v-for="i in 3" :key="i">
+        <img  v-if="anim" @click="send(disps[i-1])" :src="'/items/' + disps[i-1] + '.png'" class="button" :class="{ anim: anim }">
+      </transition>
       
-      <img v-for="i in itemN" @click="send(i-1)" :key="i" :src="'/items/' + (i-1) + '.png'" class="button">
-
     </div>
 
     <div v-else>
@@ -99,10 +115,14 @@
         cnt: 0,
         name: '',
         itemN: 12,
+        disps: [],
+        anim: true
 
       },
 
       mounted() {
+
+        this.refreshDisp();
 
         document.getElementById( "app" ).style.display = "block";
 
@@ -124,9 +144,31 @@
 
         send( n ) {
 
+          this.anim = false;
+          this.refreshDisp();
           ws.send( JSON.stringify( { kind: n, name: this.name } ) );
 
-        }
+          setTimeout( () => this.anim = true, 1000 );
+
+        },
+
+        refreshDisp() {
+
+          this.disps.length = this.itemN;
+          
+          for( let i = 0; i < this.itemN; i++ ) this.$set( this.disps, i , i );
+
+          for( let i = 0; i < this.itemN; i++ ) {
+
+            const a = Math.floor( Math.random() * this.itemN );
+            const b = Math.floor( Math.random() * this.itemN );
+            const t = this.disps[ a ];
+            this.$set( this.disps, a, this.disps[ b ] );
+            this.$set( this.disps, b, t );
+
+          }
+
+        },
 
       }
 
