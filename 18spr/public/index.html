@@ -78,10 +78,24 @@
 
     }
 
+    .splash{
+
+      text-align: center;
+      font-size: 13px;
+
+    }
+
     .title{
 
       width: 100%;
-      margin: 20vh 0;
+      margin: 30px 0;
+
+    }
+
+    .speaker{
+
+      margin-top: 20px;
+      width: 50px;
 
     }
 
@@ -109,9 +123,11 @@
       
     </div>
 
-    <div v-else>
+    <div v-else class="splash">
       
       <img src="title.png" class="title">
+      <img src="speaker.png" class="speaker">
+      <p>スピーカーをオンにしてください</p>
 
     </div>
 
